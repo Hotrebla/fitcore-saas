@@ -12,7 +12,9 @@ import {
   Clock, 
   RefreshCw,
   Cpu,
-  Smartphone
+  Smartphone,
+  MessageSquare,
+  Apple
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { UserMember, AccessLog, Branch } from '../../types';
@@ -105,6 +107,15 @@ export const AccessControlModule: React.FC<AccessControlModuleProps> = ({
     }
   };
 
+  const handleSendNutritionWhatsApp = (member: UserMember) => {
+    const studentName = `${member.firstName} ${member.lastName}`;
+    const studentDni = member.docNumber || '45892134';
+    const urlPlan = `https://www.bienestarsinexcusas.site/?socio=fitcore&partner=FITCORE_POWERSTUDIO&dni=${studentDni}&nombre=${encodeURIComponent(studentName)}`;
+    const message = `¡Hola ${studentName}! 💪 Bienvenido a FitCore PowerStudio.\n\nTu membresía incluye tu App Oficial de Nutrición y Entrenamiento con Inteligencia Artificial.\n\n📲 Toca aquí para completar tu ficha y activar tu plan de 28 días:\n${urlPlan}\n\n¡Nos vemos en el entrenamiento! 🔥`;
+    const cleanPhone = member.phone.replace(/[^0-9]/g, '');
+    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
   return (
     <div className="space-y-6">
       {/* HEADER */}
@@ -184,6 +195,17 @@ export const AccessControlModule: React.FC<AccessControlModuleProps> = ({
                 </option>
               ))}
             </select>
+
+            <div className="mt-2">
+              <button
+                type="button"
+                onClick={() => handleSendNutritionWhatsApp(selectedMember)}
+                className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-600/40 rounded-xl text-[11px] font-bold transition-all cursor-pointer shadow-sm"
+              >
+                <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+                <span>📲 Enviar App de Nutrición IA por WhatsApp</span>
+              </button>
+            </div>
           </div>
 
           {/* AUTHENTICATION METHOD SELECTOR */}

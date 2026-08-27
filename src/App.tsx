@@ -12,6 +12,7 @@ import { BoutiqueBookingModule } from './components/operations/BoutiqueBookingMo
 import { TrainingBiometricsModule } from './components/operations/TrainingBiometricsModule';
 import { WhatsappCrmModule } from './components/operations/WhatsappCrmModule';
 import { FinancialBiModule } from './components/operations/FinancialBiModule';
+import { AiNutritionModule } from './components/operations/AiNutritionModule';
 
 import { ActiveModule, Tenant, Branch, UserMember, AccessLog, BoutiqueClass, Role } from './types';
 import { 
@@ -194,6 +195,12 @@ export default function App() {
           {activeModule === 'FINANCIAL_BI' && (
             <FinancialBiModule
               tenant={currentTenant}
+            />
+          )}
+
+          {activeModule === 'AI_NUTRITION' && (
+            <AiNutritionModule
+              members={members}
             />
           )}
 

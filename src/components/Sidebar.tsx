@@ -14,7 +14,8 @@ import {
   Cpu,
   Layers,
   Sparkles,
-  Rocket
+  Rocket,
+  Apple
 } from 'lucide-react';
 import { ActiveModule, Currency } from '../types';
 
@@ -118,6 +119,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
       badge: 'MRR / Churn',
       icon: BarChart3,
       desc: 'Métricas SaaS y caja rápida'
+    },
+    {
+      id: 'AI_NUTRITION' as ActiveModule,
+      label: '10. Nutrición & Planes IA',
+      badge: 'Bienestar IA',
+      icon: Apple,
+      desc: 'App 28 días Bienestar Sin Excusas'
     }
   ];
 

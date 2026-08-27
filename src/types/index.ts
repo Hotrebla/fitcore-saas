@@ -12,7 +12,8 @@ export type ActiveModule =
   | 'BOUTIQUE_BOOKING'
   | 'TRAINING_BIOMETRICS'
   | 'WHATSAPP_CRM'
-  | 'FINANCIAL_BI';
+  | 'FINANCIAL_BI'
+  | 'AI_NUTRITION';
 
 export interface SaaSSubscription {
   plan: 'BOUTIQUE_STUDIO' | 'GYM_PRO' | 'ENTERPRISE_CHAIN';

@@ -12,7 +12,8 @@ import {
   RefreshCw,
   CheckCircle2,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  MessageSquare
 } from 'lucide-react';
 import { 
   LineChart, 
@@ -193,6 +194,38 @@ export const TrainingBiometricsModule: React.FC<TrainingBiometricsProps> = ({ me
                 {inbodySyncing ? 'Leyendo...' : 'Sincronizar InBody'}
               </button>
             </div>
+          </div>
+
+          {/* NUTRICION IA ACTIVATION BANNER */}
+          <div className="bg-gradient-to-r from-emerald-950/70 via-slate-900 to-slate-900 border border-emerald-500/40 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold shrink-0">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-white">
+                  Plan de Nutrición IA Sincronizado para {member.firstName} {member.lastName}
+                </h4>
+                <p className="text-[11px] text-slate-400">
+                  Ajusta calorías y macros automáticamente según sus datos de composición corporal InBody.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                const studentName = `${member.firstName} ${member.lastName}`;
+                const studentDni = member.docNumber || '45892134';
+                const urlPlan = `https://www.bienestarsinexcusas.site/?socio=fitcore&partner=FITCORE_POWERSTUDIO&dni=${studentDni}&nombre=${encodeURIComponent(studentName)}`;
+                const message = `¡Hola ${studentName}! 💪 Bienvenido a FitCore PowerStudio.\n\nTu membresía incluye tu App Oficial de Nutrición y Entrenamiento con Inteligencia Artificial.\n\n📲 Toca aquí para completar tu ficha y activar tu plan de 28 días:\n${urlPlan}\n\n¡Nos vemos en el entrenamiento! 🔥`;
+                const cleanPhone = member.phone.replace(/[^0-9]/g, '');
+                window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
+              }}
+              className="shrink-0 flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-xs font-black transition-all shadow-md cursor-pointer uppercase tracking-wider"
+            >
+              <MessageSquare className="w-4 h-4 text-slate-950" />
+              <span>📲 Enviar App de Nutrición IA por WhatsApp</span>
+            </button>
           </div>
 
           {inbodySuccessMessage && (

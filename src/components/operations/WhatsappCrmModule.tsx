@@ -43,9 +43,18 @@ export const WhatsappCrmModule: React.FC<WhatsappCrmProps> = ({ members }) => {
   const [activeTab, setActiveTab] = useState<'WHATSAPP_BOT' | 'KANBAN_PIPELINE'>('WHATSAPP_BOT');
   const [messages, setMessages] = useState<WhatsAppMessage[]>(SAMPLE_WHATSAPP_MESSAGES);
   const [selectedMember, setSelectedMember] = useState<UserMember>(members[0]);
-  const [templateType, setTemplateType] = useState<'WELCOME' | 'DEBT_REMINDER' | 'INACTIVE_14D' | 'QR_PASS'>('DEBT_REMINDER');
+  const [templateType, setTemplateType] = useState<'WELCOME' | 'DEBT_REMINDER' | 'INACTIVE_14D' | 'QR_PASS' | 'NUTRITION_AI'>('NUTRITION_AI');
   const [leads, setLeads] = useState<LeadCard[]>(INITIAL_LEADS);
   const [isSending, setIsSending] = useState(false);
+
+  const handleOpenDirectWhatsAppWeb = (member: UserMember) => {
+    const studentName = `${member.firstName} ${member.lastName}`;
+    const studentDni = member.docNumber || '45892134';
+    const urlPlan = `https://www.bienestarsinexcusas.site/?socio=fitcore&partner=FITCORE_POWERSTUDIO&dni=${studentDni}&nombre=${encodeURIComponent(studentName)}`;
+    const message = `¡Hola ${studentName}! 💪 Bienvenido a FitCore PowerStudio.\n\nTu membresía incluye tu App Oficial de Nutrición y Entrenamiento con Inteligencia Artificial.\n\n📲 Toca aquí para completar tu ficha y activar tu plan de 28 días:\n${urlPlan}\n\n¡Nos vemos en el entrenamiento! 🔥`;
+    const cleanPhone = member.phone.replace(/[^0-9]/g, '');
+    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
+  };
 
   const handleSendAutomatedMessage = () => {
     setIsSending(true);
@@ -54,7 +63,14 @@ export const WhatsappCrmModule: React.FC<WhatsappCrmProps> = ({ members }) => {
     let type: WhatsAppMessage['type'] = 'PAYMENT_REMINDER';
     let actions: string[] = [];
 
-    if (templateType === 'WELCOME') {
+    if (templateType === 'NUTRITION_AI') {
+      type = 'WELCOME_CREDENTIAL';
+      const studentName = `${selectedMember.firstName} ${selectedMember.lastName}`;
+      const studentDni = selectedMember.docNumber || '45892134';
+      const urlPlan = `https://www.bienestarsinexcusas.site/?socio=fitcore&partner=FITCORE_POWERSTUDIO&dni=${studentDni}&nombre=${encodeURIComponent(studentName)}`;
+      content = `¡Hola ${studentName}! 💪 Bienvenido a FitCore PowerStudio.\n\nTu membresía incluye tu App Oficial de Nutrición y Entrenamiento con Inteligencia Artificial.\n\n📲 Toca aquí para completar tu ficha y activar tu plan de 28 días:\n${urlPlan}\n\n¡Nos vemos en el entrenamiento! 🔥`;
+      actions = ['🥗 Abrir App Nutrición IA', '📋 Completar Ficha'];
+    } else if (templateType === 'WELCOME') {
       type = 'WELCOME_CREDENTIAL';
       content = `¡Hola ${selectedMember.firstName}! 🏋️‍♂️ Bienvenido a FIT-CORE. Tu credencial digital y código QR dinámico de acceso ya están activos en la App: https://app.fitcore.io/qr?u=${selectedMember.docNumber}. ¡Te esperamos en sala!`;
       actions = ['Abrir App QR', 'Ver Mi Rutina'];
@@ -192,6 +208,22 @@ export const WhatsappCrmModule: React.FC<WhatsappCrmProps> = ({ members }) => {
               <div className="space-y-2">
                 <button
                   type="button"
+                  onClick={() => setTemplateType('NUTRITION_AI')}
+                  className={`w-full p-3 rounded-xl border text-left text-xs transition-all ${
+                    templateType === 'NUTRITION_AI'
+                      ? 'bg-emerald-950/80 border-emerald-400 text-white shadow-md'
+                      : 'bg-slate-950/40 border-slate-800 text-slate-400 hover:border-slate-700'
+                  }`}
+                >
+                  <span className="font-bold text-emerald-300 flex items-center justify-between">
+                    <span>🥗 Activación App Nutrición IA (28 Días)</span>
+                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-900 text-emerald-300 font-extrabold">Recomendado</span>
+                  </span>
+                  <span className="text-[11px] text-slate-300 block mt-0.5">Enlace personalizado con DNI y nombre (Bienestar Sin Excusas)</span>
+                </button>
+
+                <button
+                  type="button"
                   onClick={() => setTemplateType('DEBT_REMINDER')}
                   className={`w-full p-3 rounded-xl border text-left text-xs transition-all ${
                     templateType === 'DEBT_REMINDER'
@@ -231,15 +263,26 @@ export const WhatsappCrmModule: React.FC<WhatsappCrmProps> = ({ members }) => {
               </div>
             </div>
 
-            <button
-              id="btn-send-whatsapp"
-              onClick={handleSendAutomatedMessage}
-              disabled={isSending}
-              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-950/50 transition-all cursor-pointer text-xs"
-            >
-              <Send className="w-4 h-4" />
-              {isSending ? 'Enviando por WhatsApp API...' : 'Disparar Mensaje por WhatsApp Cloud API'}
-            </button>
+            <div className="space-y-2 pt-2">
+              <button
+                id="btn-direct-nutrition-wa"
+                onClick={() => handleOpenDirectWhatsAppWeb(selectedMember)}
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-black py-3 px-4 rounded-xl shadow-lg shadow-emerald-950/60 transition-all cursor-pointer text-xs uppercase tracking-wide"
+              >
+                <MessageSquare className="w-4 h-4 text-white" />
+                <span>📲 Enviar App de Nutrición IA por WhatsApp</span>
+              </button>
+
+              <button
+                id="btn-send-whatsapp"
+                onClick={handleSendAutomatedMessage}
+                disabled={isSending}
+                className="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 px-4 rounded-xl border border-slate-700 transition-all cursor-pointer text-xs"
+              >
+                <Send className="w-3.5 h-3.5" />
+                {isSending ? 'Simulando envío...' : 'Simular en Chat Mockup'}
+              </button>
+            </div>
 
           </div>
 
