@@ -1,0 +1,6 @@
+{
+  "name": "FIT-CORE OS - SaaS Gym Management Architecture",
+  "description": "Enterprise All-in-One SaaS for fitness centers fusing FITCO, Virtuagym, and Glofox. Features interactive ERD/DBML schemas, NestJS Clean Architecture explorer, Redis distributed lock overbooking simulator, SUNAT/Culqi/Niubiz payment engine, IoT access control, boutique spot bookings, WOD/Bioimpedance tracker, and WhatsApp automation.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
